@@ -16,6 +16,7 @@ type OIDTopicObject struct {
 type SNMPEndpointObject struct {
 	Endpoint  string           `json:"endpoint"`
 	Community string           `json:"community"`
+	Port      string              `json:"port"` // port snmp add
 	OIDTopics []OIDTopicObject `json:"oidTopics"`
 }
 
@@ -39,6 +40,9 @@ var (
 
 	// Interval is the poll interval in seconds
 	Interval int
+
+	// SNMPPort is the default SNMP port add
+	SNMPPort int
 )
 
 // ConnectionString returns the MQTT connection string

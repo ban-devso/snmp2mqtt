@@ -40,7 +40,14 @@ func Init() {
 				snmp := gosnmp.GoSNMP{}
 
 				snmp.Target = endpoint.Endpoint
-				snmp.Port = 161
+				// port SNMP
+				if endpoint.Port != 0 {
+					snmp.Port = uint16(endpoint.Port)
+				} else if config.SNMPPort != 0 {
+					snmp.Port = uint16(config.SNMPPort) // Использование порта из конфигурации по умолчанию
+				} else {
+					snmp.Port = 161 // Использование порта по умолчанию
+				}
 				snmp.Version = gosnmp.Version2c
 				snmp.Community = endpoint.Community
 

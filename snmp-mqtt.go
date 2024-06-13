@@ -25,6 +25,7 @@ Options:
   --endpoints_map=<endpoints_map>     SNMP Endpoints Map File [default: ./endpoints.json]
   --server=<server>                   MQTT server host/IP [default: 127.0.0.1]
   --port=<port>                       MQTT server port [default: 1883]
+  --portsnmp=<portsnmp>               SNMP port [default: 161]
   --clientid=<clientid>               MQTT client identifier [default: snmp]
   --interval=<interval>               Poll interval (seconds) [default: 5]
   -h, --help                          Show this screen.
@@ -43,8 +44,9 @@ Options:
 	config.Port, _ = args.Int("--port")
 	config.ClientID, _ = args.String("--clientid")
 	config.Interval, _ = args.Int("--interval")
+	config.SNMPPort, _ = args.Int("--portsnmp")
 
-	log.Printf("server: %s, port: %d, client identifier: %s, poll interval: %d", config.Server, config.Port, config.ClientID, config.Interval)
+	log.Printf("server: %s, port: %d, client identifier: %s, poll interval: %d, SNMP port: %d", config.Server, config.Port, config.ClientID, config.Interval, config.SNMPPort)
 }
 
 // sigChannelListen basic handlers for inbound signals
