@@ -15,7 +15,7 @@ import (
 var exitChan = make(chan int)
 
 // VERSION beause...
-const VERSION = "0.0.1"
+const VERSION = "0.0.2"
 
 func cliArguments() {
 	usage := `

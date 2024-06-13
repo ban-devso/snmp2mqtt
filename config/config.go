@@ -16,7 +16,7 @@ type OIDTopicObject struct {
 type SNMPEndpointObject struct {
 	Endpoint  string           `json:"endpoint"`
 	Community string           `json:"community"`
-	Port      string              `json:"port"` // port snmp add
+	Port      int              `json:"port"` // port snmp add
 	OIDTopics []OIDTopicObject `json:"oidTopics"`
 }
 
