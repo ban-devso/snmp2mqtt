@@ -8,7 +8,7 @@ import (
     "sync"
     "time"
 
-    "github.com/dchote/snmp-mqtt/config"
+    "github.com/ban-devso/snmp-mqtt/config"
     mqtt "github.com/eclipse/paho.mqtt.golang"
     "github.com/gosnmp/gosnmp"
 )

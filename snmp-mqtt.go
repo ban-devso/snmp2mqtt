@@ -6,16 +6,16 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/dchote/snmp-mqtt/config"
-	"github.com/dchote/snmp-mqtt/snmp"
+	"github.com/ban-devso/snmp-mqtt/config"
+	"github.com/ban-devso/snmp-mqtt/snmp"
 
 	"github.com/docopt/docopt-go"
 )
 
 var exitChan = make(chan int)
 
-// VERSION beause...
-const VERSION = "0.0.3"
+// VERSION because...
+const VERSION = "0.0.2"
 
 func cliArguments() {
 	usage := `
@@ -39,8 +39,7 @@ Options:
 		log.Println(err)
 		log.Fatal("error opening " + mapFile)
 	}
-	log.Printf("Loaded SNMPPort from config: %d", config.SNMPPort)  // Отладочная печать
-	
+
 	config.Server, _ = args.String("--server")
 	config.Port, _ = args.Int("--port")
 	config.ClientID, _ = args.String("--clientid")

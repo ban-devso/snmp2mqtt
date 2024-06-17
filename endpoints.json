@@ -1,122 +1,55 @@
 {
   "snmpEndpoints": [
     {
-      "endpoint": "172.18.0.1",
+      "endpoint": "192.168.215.42",
       "community": "public",
+      "port": "10161",
       "oidTopics": [
-        {
-          "oid": ".1.3.6.1.2.1.31.1.1.1.6.4",
-          "topic": "network/router/interfaces/wan/bytesIn"
-        },
-        {
-          "oid": ".1.3.6.1.2.1.31.1.1.1.10.4",
-          "topic": "network/router/interfaces/wan/bytesOut"
-        },
-        {
-          "oid": ".1.3.6.1.2.1.31.1.1.1.6.2",
-          "topic": "network/router/interfaces/lan/bytesIn"
-        },
-        {
-          "oid": ".1.3.6.1.2.1.31.1.1.1.10.2",
-          "topic": "network/router/interfaces/lan/bytesOut"
-        }
-      ]
-    },
-    {
-      "endpoint": "172.18.0.50",
-      "community": "public",
-      "oidTopics": [
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.12.2.3.1.1.2.1",
-          "topic": "power/rackPDU/outputCurrentX10"
-        },
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.12.1.16.0",
-          "topic": "power/rackPDU/watts"
-        }
-      ]
-    },
-    {
-      "endpoint": "172.18.0.51",
-      "community": "public",
-      "oidTopics": [
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.1.3.2.1.0",
-          "topic": "power/rackUPS/lineVoltage"
-        },
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.1.4.2.4.0",
-          "topic": "power/rackUPS/outputCurrent"
-        },
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.1.2.2.1.0",
-          "topic": "power/rackUPS/batteryCapacity"
-        },
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.1.2.2.3.0",
-          "topic": "power/rackUPS/batteryRuntime"
-        },
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.1.2.2.2.0",
-          "topic": "power/rackUPS/batteryTemperature"
-        }
-      ]
-    },
-    {
-      "endpoint": "172.18.0.52",
-      "community": "public",
-      "oidTopics": [
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.1.3.2.1.0",
-          "topic": "power/printerUPS/lineVoltage"
-        },
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.1.4.2.4.0",
-          "topic": "power/printerUPS/outputCurrent"
-        },
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.1.2.2.1.0",
-          "topic": "power/printerUPS/batteryCapacity"
-        },
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.1.2.2.3.0",
-          "topic": "power/printerUPS/batteryRuntime"
-        },
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.1.2.2.2.0",
-          "topic": "power/printerUPS/batteryTemperature"
-        }
-      ]
-    },
-    {
-      "endpoint": "172.18.0.53",
-      "community": "public",
-      "oidTopics": [
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.1.3.2.1.0",
-          "topic": "power/dansDesk/lineVoltage"
-        },
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.1.4.2.4.0",
-          "topic": "power/dansDesk/outputCurrent"
-        },
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.1.2.2.1.0",
-          "topic": "power/dansDesk/batteryCapacity"
-        },
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.1.2.2.3.0",
-          "topic": "power/dansDesk/batteryRuntime"
-        },
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.1.2.2.2.0",
-          "topic": "power/dansDesk/batteryTemperature"
-        },
-        {
-          "oid": ".1.3.6.1.4.1.318.1.1.10.2.3.2.1.4.1",
-          "topic": "power/dansDesk/temperatureProbe"
-        }
+		  {
+			"oid": ".1.3.6.1.4.1.2021.4.5.0",
+			"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_memTotalReal"
+		  },
+	      {
+			"oid": ".1.3.6.1.4.1.2021.4.6.0",
+			"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_memAvailReal"
+		  },
+		  {
+			"oid": ".1.3.6.1.4.1.2021.4.11.0",
+			"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_memTotalFree"
+		  },
+		  {
+			"oid": ".1.3.6.1.4.1.2021.4.12.0",
+			"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_memMinimumSwap"
+		  },
+		  {
+			"oid": ".1.3.6.1.4.1.2021.11.9.0",
+			"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_ssCpuUser"
+		  },
+		  {
+			"oid": ".1.3.6.1.4.1.2021.11.10.0",
+			"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_ssCpuSystem"
+		  },
+		  {
+			"oid": ".1.3.6.1.4.1.2021.11.11.0",
+			"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_ssCpuIdle"
+		  },
+		  {
+			"oid": ".1.3.6.1.4.1.2021.11.57.0",
+			"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_ssIORawSent"
+		  },
+		  {
+			"oid": ".1.3.6.1.4.1.2021.11.58.0",
+			"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_ssIORawReceived"
+		  },
+		  {
+			"oid": ".1.3.6.1.4.1.2021.11.59.0",
+			"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_ssRawInterrupts"
+		  },
+		  {
+			"oid": ".1.3.6.1.4.1.2021.11.60.0",
+			"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_ssRawContexts"
+		  }
       ]
     }
-  ]
+ ]
 }
