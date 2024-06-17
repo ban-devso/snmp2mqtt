@@ -1,109 +1,102 @@
 package snmp
 
 import (
-    "fmt"
-    "log"
-    "strconv"
-    "strings"
-    "sync"
-    "time"
+	"fmt"
+	"log"
+	"strings"
+	"sync"
+	"time"
 
-    "github.com/ban-devso/snmp-mqtt/config"
-    mqtt "github.com/eclipse/paho.mqtt.golang"
-    "github.com/gosnmp/gosnmp"
+	"github.com/ban-devso/snmp-mqtt/config"
+	"github.com/eclipse/paho.mqtt.golang"
+	"github.com/gosnmp/gosnmp"
 )
 
 // Init contains the generic read/publish loop
 func Init() {
-    opts := mqtt.NewClientOptions().AddBroker(config.ConnectionString()).SetClientID(config.ClientID)
-    opts.SetKeepAlive(2 * time.Second)
-    opts.SetPingTimeout(1 * time.Second)
+	opts := mqtt.NewClientOptions().AddBroker(config.ConnectionString()).SetClientID(config.Conf.ClientID)
+	opts.SetKeepAlive(2 * time.Second)
+	opts.SetPingTimeout(1 * time.Second)
 
-    client := mqtt.NewClient(opts)
-    if token := client.Connect(); token.Wait() && token.Error() != nil {
-        panic(token.Error())
-    }
+	client := mqtt.NewClient(opts)
+	if token := client.Connect(); token.Wait() && token.Error() != nil {
+		panic(token.Error())
+	}
 
-    var wg sync.WaitGroup
+	var wg sync.WaitGroup
 
-    for {
-        wg.Add(1)
+	for {
+		wg.Add(1)
 
-        go func() {
-            defer wg.Done()
+		go func() {
+			defer wg.Done()
 
-            for _, endpoint := range config.SNMPMap.SNMPEndpoints {
-                log.Println("Polling endpoint " + endpoint.Endpoint)
+			for _, endpoint := range config.Conf.SNMPMap.SNMPEndpoints {
+				log.Println("Polling endpoint " + endpoint.Endpoint)
 
-                snmp := gosnmp.GoSNMP{}
+				snmp := gosnmp.GoSNMP{}
 
-                snmp.Target = endpoint.Endpoint
-                
-                port, err := strconv.Atoi(endpoint.Port)
-                if err != nil {
-                    log.Fatal("Invalid port value\n")
-                }
-                
-                if port != 0 {
-                    snmp.Port = uint16(port)
-                } else if config.SNMPPort != 0 {
-                    snmp.Port = uint16(config.SNMPPort)
-                } else {
-                    snmp.Port = 161
-                }
+				snmp.Target = endpoint.Endpoint
+				// port SNMP
+				if endpoint.Port != 0 {
+					snmp.Port = uint16(endpoint.Port)
+				} else if config.Conf.SNMPPort != 0 {
+					snmp.Port = uint16(config.Conf.SNMPPort) // Использование порта из конфигурации по умолчанию
+				} else {
+					snmp.Port = 161 // Использование порта по умолчанию
+				}
+				snmp.Version = gosnmp.Version2c
+				snmp.Community = endpoint.Community
 
-                snmp.Version = gosnmp.Version2c
-                snmp.Community = endpoint.Community
+				snmp.Timeout = time.Duration(5 * time.Second)
+				err := snmp.Connect()
+				if err != nil {
+					log.Fatal("SNMP Connect error\n")
+				}
 
-                snmp.Timeout = time.Duration(5 * time.Second)
-                err = snmp.Connect()
-                if err != nil {
-                    log.Fatal("SNMP Connect error\n")
-                }
+				oids := []string{}
 
-                oids := []string{}
+				for _, oidTopic := range endpoint.OIDTopics {
+					oids = append(oids, oidTopic.OID)
+				}
 
-                for _, oidTopic := range endpoint.OIDTopics {
-                    oids = append(oids, oidTopic.OID)
-                }
+				result, err := snmp.Get(oids)
+				if err != nil {
+					log.Printf("error in Get: %s", err)
+				} else {
+					for _, variable := range result.Variables {
+						for _, oidTopic := range endpoint.OIDTopics {
+							if strings.Compare(oidTopic.OID, variable.Name) == 0 {
+								convertedValue := ""
 
-                result, err := snmp.Get(oids)
-                if err != nil {
-                    log.Printf("error in Get: %s", err)
-                } else {
-                    for _, variable := range result.Variables {
-                        for _, oidTopic := range endpoint.OIDTopics {
-                            if strings.Compare(oidTopic.OID, variable.Name) == 0 {
-                                convertedValue := ""
+								switch variable.Type {
+								case gosnmp.OctetString:
+									convertedValue = string(variable.Value.([]byte))
+								default:
+									convertedValue = fmt.Sprintf("%d", gosnmp.ToBigInt(variable.Value))
+								}
 
-                                switch variable.Type {
-                                case gosnmp.OctetString:
-                                    convertedValue = string(variable.Value.([]byte))
-                                default:
-                                    convertedValue = fmt.Sprintf("%d", gosnmp.ToBigInt(variable.Value))
-                                }
+								log.Printf("%s = %s", oidTopic.Topic, convertedValue)
+								token := client.Publish(oidTopic.Topic, 0, false, convertedValue)
 
-                                log.Printf("%s = %s", oidTopic.Topic, convertedValue)
-                                token := client.Publish(oidTopic.Topic, 0, false, convertedValue)
+								token.Wait()
+								if token.Error() != nil {
+									log.Fatal(token.Error())
+								}
+							}
+						}
+					}
+				}
+				snmp.Conn.Close()
+			}
 
-                                token.Wait()
-                                if token.Error() != nil {
-                                    log.Fatal(token.Error())
-                                }
-                            }
-                        }
-                    }
-                }
-                snmp.Conn.Close()
-            }
+		}()
 
-        }()
+		time.Sleep(time.Duration(config.Conf.Interval) * time.Second)
+	}
 
-        time.Sleep(time.Duration(config.Interval) * time.Second)
-    }
+	wg.Wait()
 
-    wg.Wait()
-
-    client.Disconnect(250)
-    time.Sleep(1 * time.Second)
+	client.Disconnect(250)
+	time.Sleep(1 * time.Second)
 }
