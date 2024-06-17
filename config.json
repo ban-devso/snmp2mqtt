@@ -1,0 +1,62 @@
+{
+    "server": "127.0.0.1",
+    "port": 1883,
+    "clientid": "snmp-client",
+    "interval": 10,
+    "snmpPort": 161,
+    "snmpMap": {
+        "snmpEndpoints": [
+            {
+                "endpoint": "127.0.0.1",
+                "community": "public",
+                "port": 161,
+                "oidTopics": [
+				  {
+					"oid": ".1.3.6.1.4.1.2021.4.5.0",
+					"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_memTotalReal"
+				  },
+				  {
+					"oid": ".1.3.6.1.4.1.2021.4.6.0",
+					"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_memAvailReal"
+				  },
+				  {
+					"oid": ".1.3.6.1.4.1.2021.4.11.0",
+					"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_memTotalFree"
+				  },
+				  {
+					"oid": ".1.3.6.1.4.1.2021.4.12.0",
+					"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_memMinimumSwap"
+				  },
+				  {
+					"oid": ".1.3.6.1.4.1.2021.11.9.0",
+					"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_ssCpuUser"
+				  },
+				  {
+					"oid": ".1.3.6.1.4.1.2021.11.10.0",
+					"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_ssCpuSystem"
+				  },
+				  {
+					"oid": ".1.3.6.1.4.1.2021.11.11.0",
+					"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_ssCpuIdle"
+				  },
+				  {
+					"oid": ".1.3.6.1.4.1.2021.11.57.0",
+					"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_ssIORawSent"
+				  },
+				  {
+					"oid": ".1.3.6.1.4.1.2021.11.58.0",
+					"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_ssIORawReceived"
+				  },
+				  {
+					"oid": ".1.3.6.1.4.1.2021.11.59.0",
+					"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_ssRawInterrupts"
+				  },
+				  {
+					"oid": ".1.3.6.1.4.1.2021.11.60.0",
+					"topic": "/devices/b1f1r1_b1f1r1_01_n1_sensor/controls/snmp_ssRawContexts"
+				  }
+                ]
+            }
+        ]
+    }
+}
