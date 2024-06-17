@@ -15,7 +15,7 @@ import (
 var exitChan = make(chan int)
 
 // VERSION because...
-const VERSION = "0.0.2"
+const VERSION = "0.0.3"
 
 func cliArguments() {
 	usage := `
@@ -23,6 +23,7 @@ Usage: snmp-mqtt [options]
 
 Options:
   --endpoints_map=<endpoints_map>     SNMP Endpoints Map File [default: ./endpoints.json]
+  --config=<config>                   Config File [default: ./config.json]
   --server=<server>                   MQTT server host/IP [default: 127.0.0.1]
   --port=<port>                       MQTT server port [default: 1883]
   --portsnmp=<portsnmp>               SNMP port [default: 161]
@@ -33,20 +34,29 @@ Options:
 `
 	args, _ := docopt.ParseArgs(usage, os.Args[1:], VERSION)
 
-	mapFile, _ := args.String("--endpoints_map")
-	err := config.LoadMap(mapFile)
+	configFile, _ := args.String("--config")
+	err := config.LoadMap(configFile)
 	if err != nil {
 		log.Println(err)
-		log.Fatal("error opening " + mapFile)
+		log.Fatal("error opening " + configFile)
 	}
 
-	config.Server, _ = args.String("--server")
-	config.Port, _ = args.Int("--port")
-	config.ClientID, _ = args.String("--clientid")
-	config.Interval, _ = args.Int("--interval")
-	config.SNMPPort, _ = args.Int("--portsnmp")
+	config.Conf.Server, _ = args.String("--server")
+	config.Conf.Port, _ = args.Int("--port")
+	config.Conf.ClientID, _ = args.String("--clientid")
+	config.Conf.Interval, _ = args.Int("--interval")
+	config.Conf.SNMPPort, _ = args.Int("--portsnmp")
 
-	log.Printf("server: %s, port: %d, client identifier: %s, poll interval: %d, SNMP port: %d", config.Server, config.Port, config.ClientID, config.Interval, config.SNMPPort)
+	log.Printf("server: %s, port: %d, client identifier: %s, poll interval: %d, SNMP port: %d", config.Conf.Server, config.Conf.Port, config.Conf.ClientID, config.Conf.Interval, config.Conf.SNMPPort)
+
+	if config.Conf.SNMPMap != nil {
+		for _, endpoint := range config.Conf.SNMPMap.SNMPEndpoints {
+			log.Printf("SNMP Endpoint: %s, Port: %d, Community: %s", endpoint.Endpoint, endpoint.Port, endpoint.Community)
+			for _, oidTopic := range endpoint.OIDTopics {
+				log.Printf("OID: %s, Topic: %s", oidTopic.OID, oidTopic.Topic)
+			}
+		}
+	}
 }
 
 // sigChannelListen basic handlers for inbound signals

@@ -16,7 +16,7 @@ type OIDTopicObject struct {
 type SNMPEndpointObject struct {
 	Endpoint  string           `json:"endpoint"`
 	Community string           `json:"community"`
-	Port      string           `json:"port"` // port snmp add
+	Port      int              `json:"port"` // порт SNMP
 	OIDTopics []OIDTopicObject `json:"oidTopics"`
 }
 
@@ -25,32 +25,27 @@ type SNMPMapObject struct {
 	SNMPEndpoints []SNMPEndpointObject `json:"snmpEndpoints"`
 }
 
+// Config represents the configuration structure
+type Config struct {
+	SNMPMap   *SNMPMapObject `json:"snmpMap"`
+	Server    string         `json:"server"`
+	Port      int            `json:"port"`
+	ClientID  string         `json:"clientid"`
+	Interval  int            `json:"interval"`
+	SNMPPort  int            `json:"snmpPort"`
+}
+
 var (
-	// SNMPMap is the loaded JSON configuration
-	SNMPMap *SNMPMapObject
-
-	// Server is the MQTT server address
-	Server string
-
-	// Port is the MQTT server listen port
-	Port int
-
-	// ClientID is how the name of the client
-	ClientID string
-
-	// Interval is the poll interval in seconds
-	Interval int
-
-	// SNMPPort is the default SNMP port add
-	SNMPPort int
+	// Global configuration
+	Conf Config
 )
 
 // ConnectionString returns the MQTT connection string
 func ConnectionString() string {
-	return "tcp://" + Server + ":" + strconv.Itoa(Port)
+	return "tcp://" + Conf.Server + ":" + strconv.Itoa(Conf.Port)
 }
 
-// LoadMap loads the file in to the struct
+// LoadMap loads the configuration from the file
 func LoadMap(file string) error {
 	configFile, err := os.Open(file)
 	defer configFile.Close()
@@ -59,7 +54,7 @@ func LoadMap(file string) error {
 	}
 
 	jsonParser := json.NewDecoder(configFile)
-	err = jsonParser.Decode(&SNMPMap)
+	err = jsonParser.Decode(&Conf)
 
 	if err != nil {
 		return err
