@@ -10,7 +10,7 @@ import (
 	"github.com/dchote/snmp-mqtt/config"
 
 	"github.com/eclipse/paho.mqtt.golang"
-	"github.com/soniah/gosnmp"
+	"github.com/gosnmp/gosnmp"
 )
 
 var ()
